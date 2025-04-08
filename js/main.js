@@ -1,6 +1,5 @@
 const LIFF_ID = "2007223613-5OL4mpnA";
-const API_URL = "https://script.google.com/macros/s/AKfycbzgn1GP9NOv7dEA3-50B3eaU8QcLoDULVPpoCYFfVA/exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycbxVvvVlqdORkg82lcGpCGy844fwFfKkX6g7j_S3vXYVw3uQIDr4PugXqUOKaKY5l0LeGQ/exec";
 let userId = "";
 
 window.onload = async function () {
