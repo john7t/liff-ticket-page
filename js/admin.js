@@ -1,3 +1,5 @@
+const API_URL = "https://script.google.com/macros/s/AKfycbxVvvVlqdORkg82lcGpCGy844fwFfKkX6g7j_S3vXYVw3uQIDr4PugXqUOKaKY5l0LeGQ/exec";
+
 async function loadPendingTickets() {
   const res = await fetch(API_URL, {
     method: "POST",
