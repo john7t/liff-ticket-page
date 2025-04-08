@@ -2,153 +2,31 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>小當家取號系統</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <style>
-    body {
-      background-color: #f8f1e5;
-      font-family: "微軟正黑體", sans-serif;
-      text-align: center;
-      padding: 20px;
-      color: #4e342e;
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .demo-label {
-      font-size: 14px;
-      color: #a1887f;
-      margin-bottom: 20px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin: 10px;
-      border-radius: 8px;
-      border: 1px solid #d7ccc8;
-    }
-    button {
-      background-color: #a1887f;
-      color: white;
-      cursor: pointer;
-    }
-    .admin-section, .user-section {
-      display: none;
-      margin-top: 30px;
-    }
-    .ticket-list button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #8d6e63;
-    }
-    .result {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="logo">小當家取號系統</div>
-  <div class="demo-label">(demo)</div>
+  <div class="logo">小當家取號系統 (demo)</div>
 
-  <!-- 顧客輸入驗證碼 -->
-  <div class="user-section">
+  <!-- 顧客畫面 -->
+  <div id="user-section" style="display:none">
     <h3>請輸入驗證碼</h3>
     <input id="codeInput" maxlength="4" placeholder="四位數驗證碼" />
-    <br />
     <button onclick="submitCode()">確認</button>
-    <div class="result" id="userResult"></div>
+    <div id="userResult" class="result"></div>
   </div>
 
-  <!-- 店家控制台 -->
-  <div class="admin-section">
+  <!-- 店家畫面 -->
+  <div id="admin-section" style="display:none">
     <h3>店家控制台 - 完成編號</h3>
-    <div id="ticketContainer" class="ticket-list"></div>
-    <div class="result" id="adminResult"></div>
+    <div id="ticketContainer"></div>
+    <div id="adminResult" class="result"></div>
   </div>
 
-  <script>
-    const LIFF_ID = "2007223613-5OL4mpnA";
-    const API_URL = "https://script.google.com/macros/s/AKfycbxbKNmC_pWv2ev9UoL4nhzJeqOtVOGGdRt_mTZwFkMDNZQOAcBasa_GwCOyrB8dwdV6Rw/exec";
-
-    let userId = "";
-
-    window.onload = async function () {
-      await liff.init({ liffId: LIFF_ID });
-      const profile = await liff.getProfile();
-      userId = profile.userId;
-
-      // 檢查是否為管理員
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "isAdmin", userId })
-      });
-      const data = await res.json();
-
-      if (data.isAdmin) {
-        document.querySelector(".admin-section").style.display = "block";
-        loadPendingTickets();
-      } else {
-        document.querySelector(".user-section").style.display = "block";
-      }
-    };
-
-    async function submitCode() {
-      const code = document.getElementById("codeInput").value;
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "claimTicket",
-          code: code,
-          userId: userId
-        })
-      });
-      const data = await res.json();
-      const result = document.getElementById("userResult");
-      if (data.status === "success") {
-        result.innerText = `✅ 您的號碼是 ${data.number}`;
-      } else {
-        result.innerText = `❌ ${data.message}`;
-      }
-    }
-
-    async function loadPendingTickets() {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "getPendingTickets" })
-      });
-      const data = await res.json();
-      const container = document.getElementById("ticketContainer");
-      container.innerHTML = "";
-      data.forEach(item => {
-        const btn = document.createElement("button");
-        btn.innerText = item.number;
-        btn.onclick = () => completeTicket(item.number);
-        container.appendChild(btn);
-      });
-    }
-
-    async function completeTicket(number) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "completeTicket", number })
-      });
-      const data = await res.json();
-      const result = document.getElementById("adminResult");
-      if (data.status === "success") {
-        result.innerText = `✅ 已完成通知 ${number}`;
-        loadPendingTickets();
-      } else {
-        result.innerText = `❌ ${data.message}`;
-      }
-    }
-  </script>
+  <script src="js/main.js"></script>
+  <script src="js/user.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
