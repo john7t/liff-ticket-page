@@ -10,7 +10,14 @@
 <body>
   <div class="logo">小當家取號系統 (demo)</div>
 
-  <!-- 顧客畫面 -->
+  <!-- 店家功能畫面 -->
+  <div id="admin-section" style="display:none">
+    <button onclick="addTestTicket()">➕ 新增測試資料</button>
+    <div id="ticketContainer"></div>
+    <div id="adminResult" class="result"></div>
+  </div>
+
+  <!-- 顧客功能畫面 -->
   <div id="user-section" style="display:none">
     <h3>請輸入驗證碼</h3>
     <input id="codeInput" maxlength="4" placeholder="四位數驗證碼" />
@@ -18,13 +25,6 @@
     <div id="userResult" class="result"></div>
   </div>
 
-  <!-- 店家畫面 -->
-  <div id="admin-section" style="display:none">
-    <h3>店家控制台 - 完成編號</h3>
-    <div id="ticketContainer"></div>
-    <div id="adminResult" class="result"></div>
-  </div>
-<button onclick="addTestTicket()">➕ 新增測試資料</button>
   <script src="js/main.js"></script>
   <script src="js/user.js"></script>
   <script src="js/admin.js"></script>
